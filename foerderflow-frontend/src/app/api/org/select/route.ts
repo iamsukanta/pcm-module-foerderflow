@@ -26,7 +26,8 @@ export async function POST(req: NextRequest) {
   response.cookies.set(ORG_COOKIE, orgId, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    // Mirror the auth cookie: opt out of Secure for HTTP-only deployments.
+    secure: process.env.COOKIE_SECURE !== "false",
     path: "/",
     maxAge: 60 * 60 * 24 * 30,
   });

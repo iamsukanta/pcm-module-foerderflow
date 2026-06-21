@@ -39,7 +39,9 @@ export async function GET(req: NextRequest) {
   response.cookies.set(TOKEN_COOKIE, access_token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    // Secure cookies are dropped by browsers over plain HTTP. Default to secure,
+    // but allow opt-out (COOKIE_SECURE=false) for HTTP-only IP/port deployments.
+    secure: process.env.COOKIE_SECURE !== "false",
     path: "/",
     maxAge: COOKIE_MAX_AGE,
   });
